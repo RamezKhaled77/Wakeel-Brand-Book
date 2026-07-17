@@ -1,0 +1,4207 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wakeel365 Core Design System & Brand Book</title>
+    <!-- Typography: Tajawal (Headings) & IBM Plex Sans (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Tajawal:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Iconography -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      /* ==========================================================================
+           01. DESIGN TOKENS & SYSTEM VARIABLES (Stripe/Linear Caliber)
+           ========================================================================== */
+      :root {
+        --font-headings:
+          "Tajawal", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        --font-body:
+          "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+
+        /* Legacy mappings to preserve compatibility */
+        --font-en: var(--font-body);
+        --font-ar: var(--font-headings);
+
+        /* Spacing Scale (8px Grid System) */
+        --space-4: 4px;
+        --space-8: 8px;
+        --space-12: 12px;
+        --space-16: 16px;
+        --space-24: 24px;
+        --space-32: 32px;
+        --space-48: 48px;
+        --space-64: 64px;
+        --space-96: 96px;
+
+        /* Radius Scale */
+        --radius-4: 4px;
+        --radius-8: 8px;
+        --radius-12: 12px;
+        --radius-14: 14px;
+        --radius-16: 16px;
+        --radius-18: 18px;
+        --radius-full: 999px;
+        --radius-main: var(--radius-8);
+
+        /* Light Theme Palette */
+        --bg-app: #ffffff;
+        --bg-surface: #f8fafc;
+        --bg-surface-elevated: #ffffff;
+        --border-color: #e2e8f0;
+        --border-color-muted: #f1f5f9;
+
+        /* Typography Colors */
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --text-muted: #94a3b8;
+        --text-on-primary: #ffffff;
+
+        /* Brand Colors (Wakeel365 Core Blue) */
+        --blue-50: #eff6ff;
+        --blue-100: #dbeafe;
+        --blue-200: #bfdbfe;
+        --blue-300: #93c5fd;
+        --blue-400: #60a5fa;
+        --blue-500: #2f80ed; /* Core Primary */
+        --blue-600: #1f6fe5; /* Blue Dark */
+        --blue-700: #1d4ed8;
+        --blue-800: #1e40af;
+        --blue-900: #1e3a8a;
+        --blue-light: #5ca0f5;
+
+        /* Semantic Colors */
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #06b6d4;
+
+        /* Shadows */
+        --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+        --shadow-sm:
+          0 1px 3px 0 rgba(15, 23, 42, 0.1),
+          0 1px 2px -1px rgba(15, 23, 42, 0.1);
+        --shadow-md:
+          0 4px 6px -1px rgba(15, 23, 42, 0.08),
+          0 2px 4px -2px rgba(15, 23, 42, 0.08);
+        --shadow-lg:
+          0 10px 15px -3px rgba(15, 23, 42, 0.08),
+          0 4px 6px -4px rgba(15, 23, 42, 0.08);
+        --shadow-xl:
+          0 20px 25px -5px rgba(15, 23, 42, 0.1),
+          0 8px 10px -6px rgba(15, 23, 42, 0.1);
+
+        /* Transition Engine */
+        --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+        /* Layout Layout Values */
+        --sidebar-width: 280px;
+        --header-height: 72px;
+      }
+
+      [data-theme="dark"] {
+        --bg-app: #0b0f19;
+        --bg-surface: #111827;
+        --bg-surface-elevated: #1f2937;
+        --border-color: #1f2937;
+        --border-color-muted: #374151;
+
+        --text-primary: #f9fafb;
+        --text-secondary: #9ca3af;
+        --text-muted: #6b7280;
+
+        --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+        --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+      }
+
+      /* ==========================================================================
+           02. BASE RESETS & SCROLLBAR ARTIFACTS
+           ========================================================================== */
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        font-family: var(--font-en);
+        background-color: var(--bg-app);
+        color: var(--text-primary);
+      }
+
+      body {
+        display: flex;
+        min-height: 100vi;
+        overflow-x: hidden;
+      }
+
+      /* Custom Scrollbar for modern SaaS aesthetic */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg-app);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: var(--radius-full);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--text-muted);
+      }
+
+      /* ==========================================================================
+           03. LAYOUT SHELL ARCHITECTURE
+           ========================================================================== */
+      .sidebar {
+        width: var(--sidebar-width);
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        background: var(--bg-surface);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        z-index: 100;
+        transition: transform var(--transition-normal);
+      }
+
+      body.sidebar-collapsed .sidebar {
+        transform: translateX(-100%);
+      }
+
+      body.sidebar-collapsed .workspace {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      .sidebar-toggle-btn {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: var(--space-8);
+        border-radius: var(--radius-8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-fast);
+      }
+
+      .sidebar-toggle-btn:hover {
+        background: var(--bg-surface);
+        color: var(--text-primary);
+      }
+
+      .sidebar-toggle-btn i {
+        width: 20px;
+        height: 20px;
+      }
+
+      .sidebar-header {
+        padding: var(--space-24);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--border-color-muted);
+      }
+
+      .brand-logo-area {
+        display: flex;
+        align-items: center;
+        gap: var(--space-12);
+        font-weight: 700;
+        font-size: 1.15rem;
+        letter-spacing: -0.02em;
+      }
+
+      .brand-icon-placeholder {
+        width: 32px;
+        height: 32px;
+        background: var(--blue-500);
+        border-radius: var(--radius-8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 900;
+      }
+
+      .search-container {
+        padding: var(--space-16) var(--space-24);
+      }
+
+      .search-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .search-input-wrapper i {
+        position: absolute;
+        left: var(--space-12);
+        color: var(--text-muted);
+        width: 16px;
+        height: 16px;
+      }
+
+      .search-field {
+        width: 100%;
+        padding: var(--space-8) var(--space-12) var(--space-8) var(--space-32);
+        background: var(--bg-app);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-8);
+        font-family: var(--font-en);
+        font-size: 0.875rem;
+        color: var(--text-primary);
+        transition: var(--transition-fast);
+      }
+
+      .search-field:focus {
+        outline: none;
+        border-color: var(--blue-500);
+        box-shadow: 0 0 0 2px var(--blue-100);
+      }
+
+      .navigation-menu {
+        flex: 1;
+        overflow-y: auto;
+        padding: var(--space-12) var(--space-16);
+      }
+
+      .nav-category {
+        font-size: 0.725rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--text-muted);
+        margin: var(--space-16) var(--space-12) var(--space-8) var(--space-12);
+        font-weight: 700;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: var(--space-12);
+        padding: var(--space-8) var(--space-12);
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: var(--radius-6);
+        transition: var(--transition-fast);
+        margin-bottom: 2px;
+      }
+
+      .nav-link:hover,
+      .nav-link.active {
+        background: var(--bg-app);
+        color: var(--blue-500);
+        box-shadow: var(--shadow-xs);
+      }
+
+      .nav-link i {
+        width: 16px;
+        height: 16px;
+      }
+
+      .theme-toggle-btn {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        padding: var(--space-8);
+        border-radius: var(--radius-8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition-fast);
+      }
+
+      .theme-toggle-btn:hover {
+        background: var(--bg-app);
+        color: var(--text-primary);
+      }
+
+      /* Main Workspace Engine */
+      .workspace {
+        margin-left: var(--sidebar-width);
+        width: calc(100vw - var(--sidebar-width));
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        transition:
+          margin-left var(--transition-normal),
+          width var(--transition-normal);
+      }
+
+      .workspace-header {
+        height: var(--header-height);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 var(--space-48);
+        position: sticky;
+        top: 0;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        z-index: 90;
+      }
+
+      [data-theme="dark"] .workspace-header {
+        background: rgba(11, 15, 25, 0.8);
+      }
+
+      .doc-container {
+        max-width: 960px;
+        width: 100%;
+        margin: 0 auto;
+        padding: var(--space-64) var(--space-48) var(--space-96) var(--space-48);
+      }
+
+      /* ==========================================================================
+           04. TYPOGRAPHY & GENERAL UTILITIES
+           ========================================================================== */
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: var(--font-headings);
+        color: var(--text-primary);
+        letter-spacing: -0.02em;
+        font-weight: 700;
+      }
+
+      .section-block {
+        margin-bottom: var(--space-96);
+        scroll-margin-top: calc(var(--header-height) + var(--space-32));
+      }
+
+      .section-block h2 {
+        font-size: 2rem;
+        margin-bottom: var(--space-16);
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: var(--space-12);
+      }
+
+      .section-subtitle {
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+        margin-bottom: var(--space-32);
+        line-height: 1.6;
+      }
+
+      p {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: var(--text-secondary);
+        margin-bottom: var(--space-16);
+      }
+
+      hr {
+        border: none;
+        border-top: 1px solid var(--border-color);
+        margin: var(--space-48) 0;
+      }
+
+      /* Callout Box Utilities */
+      .callout-box {
+        background: var(--bg-surface);
+        border-left: 4px solid var(--blue-500);
+        padding: var(--space-24);
+        border-radius: 0 var(--radius-12) var(--radius-12) 0;
+        margin: var(--space-24) 0;
+      }
+
+      .callout-box p {
+        margin-bottom: 0;
+        font-style: italic;
+        color: var(--text-primary);
+      }
+
+      /* Data Matrix Grid Grid */
+      .data-matrix-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: var(--space-24);
+        margin: var(--space-32) 0;
+      }
+
+      .matrix-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-12);
+        padding: var(--space-24);
+        transition: var(--transition-normal);
+      }
+
+      .matrix-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--blue-300);
+      }
+
+      .matrix-value {
+        font-size: 2.25rem;
+        font-weight: 900;
+        color: var(--blue-500);
+        margin-bottom: var(--space-8);
+        letter-spacing: -0.03em;
+      }
+
+      .matrix-title {
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: var(--space-4);
+      }
+
+      .matrix-desc {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+
+      /* ==========================================================================
+           05. COMPONENT COVER (HERO ARCHITECTURE)
+           ========================================================================== */
+      .cover-hero {
+        background:
+          radial-gradient(
+            circle at 90% 10%,
+            var(--blue-50) 0%,
+            transparent 40%
+          ),
+          var(--bg-app);
+        padding: var(--space-96) 0 var(--space-64) 0;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: var(--space-64);
+      }
+
+      [data-theme="dark"] .cover-hero {
+        background:
+          radial-gradient(
+            circle at 90% 10%,
+            rgba(47, 128, 237, 0.08) 0%,
+            transparent 40%
+          ),
+          var(--bg-app);
+      }
+
+      .cover-tag {
+        background: var(--blue-50);
+        color: var(--blue-600);
+        padding: var(--space-4) var(--space-12);
+        border-radius: var(--radius-full);
+        font-size: 0.8125rem;
+        font-weight: 700;
+        display: inline-block;
+        margin-bottom: var(--space-24);
+        border: 1px solid var(--blue-100);
+      }
+
+      .cover-title {
+        font-size: 4rem;
+        line-height: 1.1;
+        font-weight: 900;
+        letter-spacing: -0.04em;
+        margin-bottom: var(--space-16);
+      }
+
+      .cover-title span {
+        color: var(--blue-500);
+      }
+
+      .cover-tagline {
+        font-size: 1.5rem;
+        color: var(--text-secondary);
+        max-width: 640px;
+        font-weight: 400;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ==========================================================================
+       SIDEBAR ENGINE
+       ========================================================================== -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo-area">
+          <div class="brand-icon-placeholder">W</div>
+          <span>Wakeel365</span>
+        </div>
+        <button
+          class="theme-toggle-btn"
+          id="themeToggle"
+          title="Toggle Appearance"
+        >
+          <i data-lucide="moon"></i>
+        </button>
+      </div>
+
+      <nav class="navigation-menu" id="sidebarNav">
+        <!-- Dynamic Navigation Injected via JavaScript Partitioning -->
+      </nav>
+    </aside>
+
+    <!-- ==========================================================================
+       MAIN WORKSPACE ENGINE
+       ========================================================================== -->
+    <main class="workspace">
+      <header class="workspace-header">
+        <button
+          class="sidebar-toggle-btn"
+          id="sidebarToggle"
+          title="Toggle Sidebar"
+        >
+          <i data-lucide="menu"></i>
+        </button>
+        <span
+          style="
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text-muted);
+          "
+          ><i>v1.0.0</i> // Wakeel365 Brand Book</span
+        >
+      </header>
+
+      <div class="doc-container">
+        <!-- 01 COVER -->
+        <section id="sec-01" class="cover-hero searchable-section">
+          <span class="cover-tag">Brand Platform & Interface System</span>
+          <h1 class="cover-title">Wakeel365 <span>Identity</span></h1>
+          <p class="cover-tagline">
+            One Platform. Endless Possibilities. The unified structural
+            ecosystem engineered specifically for the modern real estate
+            enterprise.
+          </p>
+        </section>
+
+        <!-- 02 TABLE OF CONTENTS -->
+        <section id="sec-02" class="section-block searchable-section">
+          <h2>02 Table of Contents</h2>
+          <p class="section-subtitle">
+            A architectural view of the system framework parts.
+          </p>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+              gap: var(--space-12);
+            "
+            id="tocGrid"
+          >
+            <!-- Automated TOC Population via Matrix Core -->
+          </div>
+        </section>
+
+        <!-- 03 BRAND STORY -->
+        <section id="sec-03" class="section-block searchable-section">
+          <h2>03 Brand Story</h2>
+          <p class="section-subtitle">
+            Real estate architecture is undergoing systemic updates, but
+            operational layers remain broken.
+          </p>
+          <p>
+            The name <strong>Wakeel</strong> originates from the Arabic word
+            meaning <em>Agent</em> or <em>Trusted Representative</em>.
+            Traditionally, real estate systems require endless human
+            verification steps, complex legacy interfaces, and fragmented
+            application chains. Brokers work in siloed structures, while
+            developers risk losing pipeline insights across systems.
+          </p>
+          <div class="callout-box">
+            <p>
+              "Let Wakeel handle the rest." The design framework addresses this
+              reality. The system does not act as another cold data layer; it is
+              an expert digital representative that handles operations, cleans
+              up messy data flows, and creates smooth paths forward.
+            </p>
+          </div>
+          <p>
+            By designing an interface that manages operational overhead
+            automatically, Wakeel365 turns complex property administration into
+            clear, actionable workflows.
+          </p>
+        </section>
+
+        <!-- 04 MISSION -->
+        <section id="sec-04" class="section-block searchable-section">
+          <h2>04 Mission</h2>
+          <p class="section-subtitle">
+            What drives our design and development layers daily.
+          </p>
+          <p>
+            To empower real estate organizations and professional teams with
+            structured, elegant utility software. We remove tedious admin work,
+            preserve operational focus, and build clear interface layers that
+            save time, improve daily productivity, and scale seamlessly.
+          </p>
+        </section>
+
+        <!-- 05 VISION -->
+        <section id="sec-05" class="section-block searchable-section">
+          <h2>05 Vision</h2>
+          <p class="section-subtitle">
+            Where our strategic product path is headed.
+          </p>
+          <p>
+            To become the definitive, high-performance digital infrastructure
+            for real estate transactions, asset governance, and customer
+            relations management across the Middle East. Wakeel365 aims to be
+            the foundational engine underneath every enterprise portal, agent
+            workspace, and development workflow.
+          </p>
+        </section>
+
+        <!-- 06 VALUES -->
+        <section id="sec-06" class="section-block searchable-section">
+          <h2>06 Core Values</h2>
+          <p class="section-subtitle">
+            The cultural and engineering foundation for every product choice.
+          </p>
+          <div class="data-matrix-grid">
+            <div class="matrix-card">
+              <div class="matrix-value">SM</div>
+              <div class="matrix-title">Smart</div>
+              <div class="matrix-desc">
+                Intelligent context extraction. Providing proactive data
+                surfaces instead of raw data tables.
+              </div>
+            </div>
+            <div class="matrix-card">
+              <div class="matrix-value">RL</div>
+              <div class="matrix-title">Reliable</div>
+              <div class="matrix-desc">
+                High system availability, predictable interface components, and
+                clear error management.
+              </div>
+            </div>
+            <div class="matrix-card">
+              <div class="matrix-value">SP</div>
+              <div class="matrix-title">Simple</div>
+              <div class="matrix-desc">
+                Continuous refinement. Removing elements until only the
+                necessary functional interface remains.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 07 PERSONALITY -->
+        <section id="sec-07" class="section-block searchable-section">
+          <h2>07 Brand Personality</h2>
+          <p class="section-subtitle">
+            Our structural traits quantified cleanly.
+          </p>
+          <div class="data-matrix-grid">
+            <div class="matrix-card">
+              <div class="matrix-value">1.0</div>
+              <div class="matrix-title">Professional</div>
+              <div class="matrix-desc">
+                Structured for strict enterprise operations.
+              </div>
+            </div>
+            <div class="matrix-card">
+              <div class="matrix-value">2.0</div>
+              <div class="matrix-title">Modern</div>
+              <div class="matrix-desc">
+                Clean UI patterns built for future scaling.
+              </div>
+            </div>
+            <div class="matrix-card">
+              <div class="matrix-value">3.0</div>
+              <div class="matrix-title">Friendly</div>
+              <div class="matrix-desc">
+                Accessible layouts with clear, calm phrasing.
+              </div>
+            </div>
+            <div class="matrix-card">
+              <div class="matrix-value">4.0</div>
+              <div class="matrix-title">Smart</div>
+              <div class="matrix-desc">
+                Saves effort through logical UX flows.
+              </div>
+            </div>
+            <div class="matrix-card">
+              <div class="matrix-value">5.0</div>
+              <div class="matrix-title">Trust</div>
+              <div class="matrix-desc">
+                Clear, reliable, and human interface patterns.
+              </div>
+            </div>
+            <div class="matrix-card">
+              <div class="matrix-value">6.0</div>
+              <div class="matrix-title">Innovative</div>
+              <div class="matrix-desc">
+                Embraces cutting-edge solutions and forward-thinking approaches.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 08 TONE OF VOICE -->
+        <section id="sec-08" class="section-block searchable-section">
+          <h2>08 Tone of Voice</h2>
+          <p class="section-subtitle">
+            How we talk to users through copy and interactive states.
+          </p>
+          <p>
+            Our copy is <strong>clear, reliable, and human</strong>. We avoid
+            overused marketing taglines, empty tech buzzwords, and exaggerated
+            claims. We state exactly what an element does simply and directly.
+          </p>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: var(--space-24);
+              margin: var(--space-24) 0;
+            "
+          >
+            <div
+              style="
+                background: rgba(239, 68, 68, 0.05);
+                padding: var(--space-16);
+                border-radius: var(--radius-8);
+                border: 1px solid rgba(239, 68, 68, 0.2);
+              "
+            >
+              <strong
+                style="color: var(--danger); display: block; margin-bottom: 8px"
+                >Incorrect Copy Pattern</strong
+              >
+              "Leverage our revolutionary AI-powered next-generation
+              hyper-scalable engine to unlock real estate growth!"
+            </div>
+            <div
+              style="
+                background: rgba(16, 185, 129, 0.05);
+                padding: var(--space-16);
+                border-radius: var(--radius-8);
+                border: 1px solid rgba(16, 185, 129, 0.2);
+              "
+            >
+              <strong
+                style="
+                  color: var(--success);
+                  display: block;
+                  margin-bottom: 8px;
+                "
+                >Correct Copy Pattern</strong
+              >
+              "Let Wakeel handle the rest. Your daily pipelines are compiled and
+              sorted automatically."
+            </div>
+          </div>
+        </section>
+
+        <!-- 09 POSITIONING -->
+        <section id="sec-09" class="section-block searchable-section">
+          <h2>09 Brand Positioning</h2>
+          <p class="section-subtitle">
+            Where we sit clearly in the modern SaaS landscape.
+          </p>
+          <p>
+            Wakeel365 occupies the space where
+            <strong
+              >enterprise reliability meets simple, modern product
+              design</strong
+            >. We design for clarity and real-world utility over flashy,
+            trend-chasing aesthetics.
+          </p>
+          <ul
+            style="
+              margin-left: var(--space-24);
+              color: var(--text-secondary);
+              line-height: 1.8;
+            "
+          >
+            <li>
+              <strong>NOT Luxury:</strong> We don't use heavy dark mode
+              configurations, high-contrast gold accents, or elite messaging. We
+              are an operational platform, not an exclusive club.
+            </li>
+            <li>
+              <strong>NOT Playful:</strong> We avoid random cartoon shapes, wavy
+              lines, or loud color schemes. We respect our users' work hours.
+            </li>
+            <li>
+              <strong>NOT Futuristic Sci-Fi AI:</strong> We don't focus on
+              glowing particles, floating neon shapes, or vague magic buttons.
+              We provide real, reliable software automation.
+            </li>
+          </ul>
+        </section>
+
+        <!-- ==========================================================================
+               10 LOGO GUIDELINES
+               ========================================================================== -->
+        <section id="sec-10" class="section-block searchable-section">
+          <h2>10 Logo Guidelines</h2>
+          <p class="section-subtitle">
+            How we construct, present, and protect the Wakeel365 signature
+            identifier — across all contexts, backgrounds, and sub-brand
+            families.
+          </p>
+
+          <style>
+            .logo-img-card {
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-12);
+              overflow: hidden;
+              background: var(--bg-surface);
+              transition: var(--transition-normal);
+            }
+            .logo-img-card:hover {
+              box-shadow: var(--shadow-md);
+              transform: translateY(-2px);
+              border-color: var(--blue-200);
+            }
+            .logo-img-card img {
+              width: 100%;
+              display: block;
+              transition: transform 0.4s ease;
+            }
+            .logo-img-card:hover img {
+              transform: scale(1.015);
+            }
+            .logo-img-caption {
+              padding: var(--space-12) var(--space-16);
+              border-top: 1px solid var(--border-color);
+              display: flex;
+              align-items: center;
+              gap: var(--space-8);
+            }
+            .logo-img-caption strong {
+              font-size: 0.8125rem;
+              color: var(--text-primary);
+            }
+            .logo-img-caption span {
+              font-size: 0.75rem;
+              color: var(--text-muted);
+              margin-left: auto;
+            }
+            .logo-section-label {
+              font-size: 0.6875rem;
+              font-weight: 800;
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+              color: var(--text-muted);
+              margin-bottom: var(--space-12);
+              margin-top: var(--space-32);
+              display: flex;
+              align-items: center;
+              gap: var(--space-8);
+            }
+            .logo-section-label::after {
+              content: "";
+              flex: 1;
+              height: 1px;
+              background: var(--border-color);
+            }
+          </style>
+
+          <!-- ── Primary Logo ──────────────────────────────────────────── -->
+          <div class="logo-section-label">Primary Logo & Variations</div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: var(--space-16);
+              margin-bottom: var(--space-8);
+            "
+          >
+            <div class="logo-img-card">
+              <div
+                style="
+                  background: #f8fafc;
+                  padding: var(--space-32);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  min-height: 180px;
+                "
+              >
+                <img
+                  src="imgs/logo_master_light.png"
+                  alt="Wakeel365 Primary Logo on Light Background"
+                  style="max-height: 80px; width: auto"
+                />
+              </div>
+              <div class="logo-img-caption">
+                <strong>Primary Logo</strong>
+                <span>Light background</span>
+              </div>
+            </div>
+            <div class="logo-img-card">
+              <div
+                style="
+                  background: #0f172a;
+                  padding: var(--space-32);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  min-height: 180px;
+                "
+              >
+                <img
+                  src="imgs/logo-on-dark.jpeg"
+                  alt="Wakeel365 Logo on Dark Background"
+                  style="max-height: 80px; width: auto"
+                />
+              </div>
+              <div class="logo-img-caption">
+                <strong>Logo on Dark</strong>
+                <span>Dark background</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Symbol only -->
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 200px 1fr;
+              gap: var(--space-16);
+              margin-bottom: var(--space-8);
+            "
+          >
+            <div class="logo-img-card">
+              <div
+                style="
+                  background: var(--blue-50);
+                  padding: var(--space-24);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  min-height: 140px;
+                "
+              >
+                <img
+                  src="imgs/symbol-only.jpeg"
+                  alt="Wakeel W Symbol"
+                  style="max-height: 72px; width: auto"
+                />
+              </div>
+              <div class="logo-img-caption">
+                <strong>Symbol Only</strong>
+                <span>32px minimum</span>
+              </div>
+            </div>
+            <div
+              class="matrix-card"
+              style="
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: var(--space-12);
+              "
+            >
+              <h4 style="margin-bottom: 4px">Logo Architecture</h4>
+              <p style="font-size: 0.875rem; margin-bottom: 0">
+                The custom interlocking curves represent
+                <strong>delegation</strong>, <strong>connection</strong>, and
+                the seamless transfer of workflows from user to platform. The
+                symbol can appear standalone at sizes ≥ 32px; pair it with the
+                wordmark above 80px.
+              </p>
+              <div style="display: flex; gap: var(--space-8); flex-wrap: wrap">
+                <div
+                  style="
+                    background: var(--bg-surface);
+                    padding: var(--space-6) var(--space-10);
+                    border-radius: var(--radius-4);
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    border: 1px solid var(--border-color);
+                  "
+                >
+                  Clear Space: ¼ logo width
+                </div>
+                <div
+                  style="
+                    background: var(--bg-surface);
+                    padding: var(--space-6) var(--space-10);
+                    border-radius: var(--radius-4);
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    border: 1px solid var(--border-color);
+                  "
+                >
+                  Min Size: 32px
+                </div>
+                <div
+                  style="
+                    background: var(--bg-surface);
+                    padding: var(--space-6) var(--space-10);
+                    border-radius: var(--radius-4);
+                    font-size: 0.75rem;
+                    font-weight: 700;
+                    border: 1px solid var(--border-color);
+                  "
+                >
+                  Font: Satoshi Rounded
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Logo Concept ──────────────────────────────────────────── -->
+          <div class="logo-section-label">Logo Concept & Construction</div>
+          <div class="logo-img-card" style="margin-bottom: var(--space-8)">
+            <img
+              src="imgs/logo_concept.png"
+              alt="Wakeel365 Logo Concept — people, connection, and the W letterform combined"
+              style="
+                width: 100%;
+                max-height: 480px;
+                object-fit: contain;
+                background: #fafbfd;
+                padding: var(--space-32);
+              "
+            />
+            <div class="logo-img-caption">
+              <strong>Logo Concept</strong>
+              <span>People + Connection + W letterform</span>
+            </div>
+          </div>
+
+          <!-- ── Sub Brands ──────────────────────────────────────────────── -->
+          <div class="logo-section-label">
+            Sub-Brand Architecture (Under Wakeel365)
+          </div>
+          <div class="logo-img-card" style="margin-bottom: var(--space-8)">
+            <img
+              src="imgs/sub_brands.png"
+              alt="Wakeel365 sub-brands: Developments, Creators, Properties, Sales"
+              style="width: 100%; display: block"
+            />
+            <div class="logo-img-caption">
+              <strong>Sub-Brand System</strong>
+              <span>Developments · Creators · Properties · Sales</span>
+            </div>
+          </div>
+
+          <!-- ── Real World Usage ───────────────────────────────────────── -->
+          <div class="logo-section-label">
+            Real World Usage & Brand Applications
+          </div>
+          <div class="logo-img-card" style="margin-bottom: var(--space-8)">
+            <img
+              src="imgs/brand_applications.png"
+              alt="Wakeel365 brand applications in real world contexts — phone, signage, mug, notebook"
+              style="width: 100%; display: block"
+            />
+            <div class="logo-img-caption">
+              <strong>Brand Applications</strong>
+              <span>Phone · Signage · Merchandise · Print</span>
+            </div>
+          </div>
+
+          <!-- ── Incorrect Usage ────────────────────────────────────────── -->
+          <div class="logo-section-label">Incorrect Usage — What to Avoid</div>
+          <div
+            class="logo-img-card"
+            style="border-color: rgba(239, 68, 68, 0.25)"
+          >
+            <img
+              src="imgs/incorrect_usage.png"
+              alt="Incorrect logo usage examples — stretched, recolored, rotated, with effects, on busy backgrounds"
+              style="width: 100%; display: block"
+            />
+            <div
+              class="logo-img-caption"
+              style="
+                background: rgba(239, 68, 68, 0.04);
+                border-top-color: rgba(239, 68, 68, 0.2);
+              "
+            >
+              <i
+                data-lucide="x-circle"
+                style="
+                  width: 14px;
+                  height: 14px;
+                  color: var(--danger);
+                  flex-shrink: 0;
+                "
+              ></i>
+              <strong style="color: var(--danger)">Never do this</strong>
+              <span
+                >No stretching · No recoloring · No rotation · No effects · No
+                busy backgrounds</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               11 LOGO CONSTRUCTION & MISUSE
+               ========================================================================== -->
+        <section id="sec-11" class="section-block searchable-section">
+          <h2>11 Logo Construction & Usage</h2>
+          <p class="section-subtitle">
+            A guide to consistent logo usage across all platforms.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: var(--space-24);
+            "
+          >
+            <div
+              style="
+                border: 1px solid rgba(16, 185, 129, 0.2);
+                padding: var(--space-24);
+                border-radius: var(--radius-12);
+                background: rgba(16, 185, 129, 0.02);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  color: var(--success);
+                  font-weight: 700;
+                  margin-bottom: var(--space-12);
+                "
+              >
+                <i data-lucide="check-circle-2"></i> Perfect Application
+              </div>
+              <p style="font-size: 0.875rem; color: var(--text-secondary)">
+                Always scale proportionally. Use the solid blue mark on neutral
+                backgrounds or white marks on primary blue blocks.
+              </p>
+            </div>
+
+            <div
+              style="
+                border: 1px solid rgba(239, 68, 68, 0.2);
+                padding: var(--space-24);
+                border-radius: var(--radius-12);
+                background: rgba(239, 68, 68, 0.02);
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  color: var(--danger);
+                  font-weight: 700;
+                  margin-bottom: var(--space-12);
+                "
+              >
+                <i data-lucide="x-circle"></i> Avoid Misuse
+              </div>
+              <p style="font-size: 0.875rem; color: var(--text-secondary)">
+                Never skew, rotate, or recolor the elements of the interlocking
+                W icon. Do not use gradients on the logo.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               12 COLOR SYSTEM
+               ========================================================================== -->
+        <section id="sec-12" class="section-block searchable-section">
+          <h2>12 Color System</h2>
+          <p class="section-subtitle">
+            Our structural color system handles brand presence, interface
+            hierarchy, and functional status indicators.
+          </p>
+
+          <h3 style="font-size: 1.25rem; margin-bottom: var(--space-16)">
+            Brand Core
+          </h3>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+              gap: var(--space-16);
+              margin-bottom: var(--space-32);
+            "
+          >
+            <div
+              style="
+                background: #2f80ed;
+                height: 120px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+                box-shadow: var(--shadow-sm);
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.875rem"
+                >Primary Blue</span
+              >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >#2F80ED</span
+              >
+            </div>
+            <div
+              style="
+                background: #1f6fe5;
+                height: 120px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.875rem"
+                >Blue Dark</span
+              >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >#1F6FE5</span
+              >
+            </div>
+            <div
+              style="
+                background: #5ca0f5;
+                height: 120px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: #0f172a;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.875rem"
+                >Blue Light</span
+              >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >#5CA0F5</span
+              >
+            </div>
+            <div
+              style="
+                background: #0f172a;
+                height: 120px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.875rem"
+                >Neutral Dark</span
+              >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >#0F172A</span
+              >
+            </div>
+
+            <div
+              style="
+                background: #bfc6c4;
+                height: 120px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+                border: 2px solid black;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.875rem; color: black"
+                >Dark Grey</span
+              >
+              <span
+                style="font-family: monospace; font-size: 0.75rem; color: black"
+                >#BFC6C4</span
+              >
+            </div>
+            <div
+              style="
+                background: #e8edf2;
+                height: 120px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+                border: 2px solid black;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.875rem; color: black"
+                >Light Grey</span
+              >
+              <span
+                style="font-family: monospace; font-size: 0.75rem; color: black"
+                >#E8EDF2</span
+              >
+            </div>
+            <div
+              style="
+                background: #f7f7f8;
+                height: 120px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+                border: 2px solid black;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.875rem; color: black"
+                >Off-White</span
+              >
+              <span
+                style="font-family: monospace; font-size: 0.75rem; color: black"
+                >#F7F7F8</span
+              >
+            </div>
+            <div
+              style="
+                background: #fffcfb;
+                height: 120px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+                border: 2px solid black;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.875rem; color: black"
+                >White</span
+              >
+              <span
+                style="font-family: monospace; font-size: 0.75rem; color: black"
+                >#FFFCFB</span
+              >
+            </div>
+          </div>
+
+          <h3 style="font-size: 1.25rem; margin-bottom: var(--space-16)">
+            Semantic Colors
+          </h3>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+              gap: var(--space-16);
+              margin-bottom: var(--space-32);
+            "
+          >
+            <div
+              style="
+                background: #10b981;
+                height: 80px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.8125rem"
+                >Success</span
+              >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >#10B981</span
+              >
+            </div>
+            <div
+              style="
+                background: #f59e0b;
+                height: 80px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.8125rem"
+                >Warning</span
+              >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >#F59E0B</span
+              >
+            </div>
+            <div
+              style="
+                background: #ef4444;
+                height: 80px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.8125rem">Danger</span>
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >#EF4444</span
+              >
+            </div>
+            <div
+              style="
+                background: #06b6d4;
+                height: 80px;
+                border-radius: var(--radius-8);
+                padding: var(--space-12);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                color: white;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.8125rem">Info</span>
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >#06B6D4</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               13 TYPOGRAPHY
+               ========================================================================== -->
+        <section id="sec-13" class="section-block searchable-section">
+          <h2>13 Typography System</h2>
+          <p class="section-subtitle">
+            Our typographic framework uses <strong>Tajawal</strong> for Headings
+            and <strong>IBM Plex Sans</strong> for Body, ensuring excellent
+            legibility and a modern, professional appearance in both English and
+            Arabic.
+          </p>
+
+          <div
+            style="
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-12);
+              overflow: hidden;
+              margin-bottom: var(--space-32);
+            "
+          >
+            <div
+              style="
+                padding: var(--space-24) var(--space-32);
+                border-bottom: 1px solid var(--border-color);
+                background: var(--bg-surface);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <span style="font-weight: 700; font-size: 0.875rem"
+                >Font Pair Showcases & Specs</span
+              >
+              <span
+                style="
+                  font-size: 0.75rem;
+                  color: var(--text-muted);
+                  font-family: monospace;
+                "
+                >Tajawal (Headings) + IBM Plex Sans (Body)</span
+              >
+            </div>
+
+            <div
+              style="
+                padding: var(--space-32);
+                display: flex;
+                flex-direction: column;
+                gap: var(--space-24);
+              "
+            >
+              <!-- Headings Example -->
+              <div>
+                <span
+                  style="
+                    font-size: 0.75rem;
+                    color: var(--text-muted);
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                  "
+                  >Headings Font: Tajawal (Google Fonts)</span
+                >
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--space-8);
+                  "
+                >
+                  <h1
+                    style="
+                      font-size: 2.5rem;
+                      line-height: 1.2;
+                      font-weight: 700;
+                      font-family: var(--font-headings);
+                    "
+                  >
+                    Tajawal Bold (English) - Wakeel handles the rest.
+                  </h1>
+                  <h2
+                    style="
+                      font-size: 2rem;
+                      line-height: 1.3;
+                      font-weight: 500;
+                      font-family: var(--font-headings);
+                      direction: rtl;
+                      text-align: right;
+                    "
+                  >
+                    منصة واحدة لجميع العمليات العقارية ( Tajawal Meduim )
+                  </h2>
+                  <h3
+                    style="
+                      font-size: 1.5rem;
+                      line-height: 1.3;
+                      font-weight: 300;
+                      font-family: var(--font-headings);
+                      direction: rtl;
+                      text-align: right;
+                    "
+                  >
+                    إدارة الأصول والوسطاء العقاريين بكل سهولة وسلاسة ( Tajawal
+                    Light )
+                  </h3>
+                </div>
+              </div>
+
+              <hr style="margin: 0; border-color: var(--border-color-muted)" />
+
+              <!-- Body Example -->
+              <div>
+                <span
+                  style="
+                    font-size: 0.75rem;
+                    color: var(--text-muted);
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                  "
+                  >Body Font: IBM Plex Sans (Google Fonts)</span
+                >
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--space-8);
+                  "
+                >
+                  <p
+                    style="
+                      font-family: var(--font-body);
+                      font-size: 1rem;
+                      line-height: 1.7;
+                      margin-bottom: 0;
+                    "
+                  >
+                    <strong>IBM Plex Sans Regular (English):</strong> Designed
+                    for readability. Wakeel365 uses utility-first spacing values
+                    to make sure long tables, dense pipelines, and complex
+                    contract screens stay clear and easy to read.
+                  </p>
+                  <p
+                    style="
+                      font-family: var(--font-body);
+                      font-size: 1rem;
+                      line-height: 1.7;
+                      margin-bottom: 0;
+                      direction: rtl;
+                      text-align: right;
+                    "
+                  >
+                    <strong>IBM Plex Sans Regular (English):</strong> مصمم
+                    لتحسين القراءة وتوفير مظهر عملي. يساعد Wakeel365 في تنظيم
+                    البيانات والجداول الطويلة والعمليات اليومية بشكل مريح ومحترف
+                    للعين.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               14 SPACING SYSTEM
+               ========================================================================== -->
+        <section id="sec-14" class="section-block searchable-section">
+          <h2>14 Spacing System</h2>
+          <p class="section-subtitle">
+            Based on a strict 8px grid system. Use these tokens to maintain
+            alignment across elements.
+          </p>
+
+          <div
+            style="display: flex; flex-direction: column; gap: var(--space-12)"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: var(--space-12) var(--space-16);
+                background: var(--bg-surface);
+                border-radius: var(--radius-8);
+              "
+            >
+              <span
+                style="
+                  font-weight: 700;
+                  font-size: 0.875rem;
+                  font-family: monospace;
+                "
+                >--space-4 (4px)</span
+              >
+              <div
+                style="
+                  width: 4px;
+                  height: 16px;
+                  background: var(--blue-500);
+                  border-radius: 2px;
+                "
+              ></div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: var(--space-12) var(--space-16);
+                background: var(--bg-surface);
+                border-radius: var(--radius-8);
+              "
+            >
+              <span
+                style="
+                  font-weight: 700;
+                  font-size: 0.875rem;
+                  font-family: monospace;
+                "
+                >--space-8 (8px)</span
+              >
+              <div
+                style="
+                  width: 8px;
+                  height: 16px;
+                  background: var(--blue-500);
+                  border-radius: 2px;
+                "
+              ></div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: var(--space-12) var(--space-16);
+                background: var(--bg-surface);
+                border-radius: var(--radius-8);
+              "
+            >
+              <span
+                style="
+                  font-weight: 700;
+                  font-size: 0.875rem;
+                  font-family: monospace;
+                "
+                >--space-16 (16px)</span
+              >
+              <div
+                style="
+                  width: 16px;
+                  height: 16px;
+                  background: var(--blue-500);
+                  border-radius: 2px;
+                "
+              ></div>
+            </div>
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: var(--space-12) var(--space-16);
+                background: var(--bg-surface);
+                border-radius: var(--radius-8);
+              "
+            >
+              <span
+                style="
+                  font-weight: 700;
+                  font-size: 0.875rem;
+                  font-family: monospace;
+                "
+                >--space-32 (32px)</span
+              >
+              <div
+                style="
+                  width: 32px;
+                  height: 16px;
+                  background: var(--blue-500);
+                  border-radius: 2px;
+                "
+              ></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               15 RADIUS SYSTEM
+               ========================================================================== -->
+        <section id="sec-15" class="section-block searchable-section">
+          <h2>15 Corner Radius</h2>
+          <p class="section-subtitle">
+            Consistent rounding rules make the interface feel modern,
+            approachable, and comfortable to use.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(3, minmax(160px, 1fr));
+              gap: var(--space-24);
+            "
+          >
+            <div
+              style="
+                background: var(--bg-surface);
+                border: 1px solid var(--blue-600);
+                border-radius: var(--radius-4);
+                height: 100px;
+                padding: var(--space-16);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              "
+            >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >--radius-4 (4px)</span
+              >
+              <span style="font-size: 0.8125rem; color: var(--text-secondary)"
+                >Input checkboxes, status badges</span
+              >
+            </div>
+            <div
+              style="
+                background: var(--bg-surface);
+                border: 1px solid var(--blue-600);
+                border-radius: var(--radius-8);
+                height: 100px;
+                padding: var(--space-16);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              "
+            >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >--radius-8 (8px) - Main</span
+              >
+              <span style="font-size: 0.8125rem; color: var(--text-secondary)"
+                >Primary buttons, standard form fields</span
+              >
+            </div>
+            <div
+              style="
+                background: var(--bg-surface);
+                border: 1px solid var(--blue-600);
+                border-radius: var(--radius-12);
+                height: 100px;
+                padding: var(--space-16);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              "
+            >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >--radius-12 (12px)</span
+              >
+              <span style="font-size: 0.8125rem; color: var(--text-secondary)"
+                >UI Cards, popup modals, tables</span
+              >
+            </div>
+            <div
+              style="
+                background: var(--bg-surface);
+                border: 1px solid var(--blue-600);
+                border-radius: var(--radius-14);
+                height: 100px;
+                padding: var(--space-16);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              "
+            >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >--radius-14 (14px)</span
+              >
+              <span style="font-size: 0.8125rem; color: var(--text-secondary)"
+                >UI Cards, popup modals, tables</span
+              >
+            </div>
+            <div
+              style="
+                background: var(--bg-surface);
+                border: 1px solid var(--blue-600);
+                border-radius: var(--radius-16);
+                height: 100px;
+                padding: var(--space-16);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              "
+            >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >--radius-16 (16px)</span
+              >
+              <span style="font-size: 0.8125rem; color: var(--text-secondary)"
+                >UI Cards, popup modals</span
+              >
+            </div>
+            <div
+              style="
+                background: var(--bg-surface);
+                border: 1px solid var(--blue-600);
+                border-radius: var(--radius-18);
+                height: 100px;
+                padding: var(--space-16);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              "
+            >
+              <span style="font-family: monospace; font-size: 0.75rem"
+                >--radius-18 (18px)</span
+              >
+              <span style="font-size: 0.8125rem; color: var(--text-secondary)"
+                >UI Cards, popup modals</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               16 SHADOWS
+               ========================================================================== -->
+        <section id="sec-16" class="section-block searchable-section">
+          <h2>16 Shadows</h2>
+          <p class="section-subtitle">
+            Soft, multi-layered shadows convey depth without cluttering the
+            interface.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+              gap: var(--space-24);
+            "
+          >
+            <div
+              style="
+                background: var(--bg-surface-elevated);
+                box-shadow: var(--shadow-sm);
+                border-radius: var(--radius-8);
+                padding: var(--space-16);
+                min-height: 100px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              "
+            >
+              <span
+                style="
+                  font-family: monospace;
+                  font-size: 0.75rem;
+                  font-weight: 700;
+                "
+                >--shadow-sm</span
+              >
+              <span style="font-size: 0.8125rem; color: var(--text-secondary)"
+                >Flat elements</span
+              >
+            </div>
+            <div
+              style="
+                background: var(--bg-surface-elevated);
+                box-shadow: var(--shadow-md);
+                border-radius: var(--radius-8);
+                padding: var(--space-16);
+                min-height: 100px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              "
+            >
+              <span
+                style="
+                  font-family: monospace;
+                  font-size: 0.75rem;
+                  font-weight: 700;
+                "
+                >--shadow-md</span
+              >
+              <span style="font-size: 0.8125rem; color: var(--text-secondary)"
+                >Hover states, dropdown lists</span
+              >
+            </div>
+            <div
+              style="
+                background: var(--bg-surface-elevated);
+                box-shadow: var(--shadow-lg);
+                border-radius: var(--radius-8);
+                padding: var(--space-16);
+                min-height: 100px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+              "
+            >
+              <span
+                style="
+                  font-family: monospace;
+                  font-size: 0.75rem;
+                  font-weight: 700;
+                "
+                >--shadow-lg</span
+              >
+              <span style="font-size: 0.8125rem; color: var(--text-secondary)"
+                >Modals, main drawers</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               17 ICONOGRAPHY
+               ========================================================================== -->
+        <section id="sec-17" class="section-block searchable-section">
+          <h2>17 Iconography Rules</h2>
+          <p class="section-subtitle">
+            We use Lucide Icons with rounded corners and consistent 2px stroke
+            weight.
+          </p>
+
+          <div
+            style="
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-12);
+              padding: var(--space-24);
+              background: var(--bg-surface);
+            "
+          >
+            <div
+              style="
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: var(--space-16);
+                text-align: center;
+              "
+            >
+              <div
+                style="
+                  background: var(--bg-app);
+                  padding: var(--space-16);
+                  border-radius: var(--radius-8);
+                  border: 1px solid var(--border-color);
+                "
+              >
+                <i
+                  data-lucide="home"
+                  style="
+                    stroke-width: 2px;
+                    color: var(--blue-500);
+                    width: 24px;
+                    height: 24px;
+                    margin-bottom: 8px;
+                  "
+                ></i>
+                <div
+                  style="
+                    font-size: 0.75rem;
+                    color: var(--text-secondary);
+                    font-family: monospace;
+                  "
+                >
+                  home
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--bg-app);
+                  padding: var(--space-16);
+                  border-radius: var(--radius-8);
+                  border: 1px solid var(--border-color);
+                "
+              >
+                <i
+                  data-lucide="users"
+                  style="
+                    stroke-width: 2px;
+                    color: var(--blue-500);
+                    width: 24px;
+                    height: 24px;
+                    margin-bottom: 8px;
+                  "
+                ></i>
+                <div
+                  style="
+                    font-size: 0.75rem;
+                    color: var(--text-secondary);
+                    font-family: monospace;
+                  "
+                >
+                  users
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--bg-app);
+                  padding: var(--space-16);
+                  border-radius: var(--radius-8);
+                  border: 1px solid var(--border-color);
+                "
+              >
+                <i
+                  data-lucide="trending-up"
+                  style="
+                    stroke-width: 2px;
+                    color: var(--blue-500);
+                    width: 24px;
+                    height: 24px;
+                    margin-bottom: 8px;
+                  "
+                ></i>
+                <div
+                  style="
+                    font-size: 0.75rem;
+                    color: var(--text-secondary);
+                    font-family: monospace;
+                  "
+                >
+                  trending-up
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--bg-app);
+                  padding: var(--space-16);
+                  border-radius: var(--radius-8);
+                  border: 1px solid var(--border-color);
+                "
+              >
+                <i
+                  data-lucide="settings"
+                  style="
+                    stroke-width: 2px;
+                    color: var(--blue-500);
+                    width: 24px;
+                    height: 24px;
+                    margin-bottom: 8px;
+                  "
+                ></i>
+                <div
+                  style="
+                    font-size: 0.75rem;
+                    color: var(--text-secondary);
+                    font-family: monospace;
+                  "
+                >
+                  settings
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--bg-app);
+                  padding: var(--space-16);
+                  border-radius: var(--radius-8);
+                  border: 1px solid var(--border-color);
+                "
+              >
+                <i
+                  data-lucide="handshake"
+                  style="
+                    stroke-width: 2px;
+                    color: var(--blue-500);
+                    width: 24px;
+                    height: 24px;
+                    margin-bottom: 8px;
+                  "
+                ></i>
+                <div
+                  style="
+                    font-size: 0.75rem;
+                    color: var(--text-secondary);
+                    font-family: monospace;
+                  "
+                >
+                  deal
+                </div>
+              </div>
+              <div
+                style="
+                  background: var(--bg-app);
+                  padding: var(--space-16);
+                  border-radius: var(--radius-8);
+                  border: 1px solid var(--border-color);
+                "
+              >
+                <i
+                  data-lucide="list"
+                  style="
+                    stroke-width: 2px;
+                    color: var(--blue-500);
+                    width: 24px;
+                    height: 24px;
+                    margin-bottom: 8px;
+                  "
+                ></i>
+                <div
+                  style="
+                    font-size: 0.75rem;
+                    color: var(--text-secondary);
+                    font-family: monospace;
+                  "
+                >
+                  list
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               18 COMPONENTS
+               ========================================================================== -->
+        <section id="sec-18" class="section-block searchable-section">
+          <h2>18 Components</h2>
+          <p class="section-subtitle">
+            Atomic and molecular interface elements engineered for reliable
+            performance and accessibility.
+          </p>
+
+          <!-- Buttons Section -->
+          <h3
+            style="
+              font-size: 1.25rem;
+              margin-bottom: var(--space-16);
+              margin-top: var(--space-32);
+            "
+          >
+            Buttons
+          </h3>
+          <div
+            class="matrix-card"
+            style="
+              display: flex;
+              flex-wrap: wrap;
+              gap: var(--space-16);
+              align-items: center;
+              background: var(--bg-surface-elevated);
+            "
+          >
+            <button class="btn-primary">Primary Action</button>
+            <button class="btn-secondary">Secondary</button>
+            <button class="btn-outline">Outline Action</button>
+            <button class="btn-ghost">Ghost Button</button>
+            <button class="btn-primary" disabled>Disabled State</button>
+          </div>
+
+          <style>
+            /* Dynamic Button Tokens */
+            .btn-primary,
+            .btn-secondary,
+            .btn-outline,
+            .btn-ghost {
+              font-family: var(--font-en);
+              font-size: 0.875rem;
+              font-weight: 600;
+              padding: var(--space-8) var(--space-16);
+              border-radius: var(--radius-main);
+              cursor: pointer;
+              transition: var(--transition-fast);
+              display: inline-flex;
+              align-items: center;
+              gap: var(--space-8);
+              border: 1px solid transparent;
+            }
+            .btn-primary {
+              background: var(--blue-500);
+              color: var(--text-on-primary);
+            }
+            .btn-primary:hover:not(:disabled) {
+              background: var(--blue-600);
+              box-shadow: var(--shadow-sm);
+            }
+            .btn-secondary {
+              background: var(--blue-50);
+              color: var(--blue-600);
+            }
+            .btn-secondary:hover:not(:disabled) {
+              background: var(--blue-100);
+            }
+            .btn-outline {
+              background: transparent;
+              border-color: var(--border-color);
+              color: var(--text-primary);
+            }
+            .btn-outline:hover:not(:disabled) {
+              background: var(--bg-surface);
+              border-color: var(--text-muted);
+            }
+            .btn-ghost {
+              background: transparent;
+              color: var(--text-secondary);
+            }
+            .btn-ghost:hover:not(:disabled) {
+              background: var(--bg-surface);
+              color: var(--text-primary);
+            }
+            button:disabled {
+              opacity: 0.5;
+              cursor: not-allowed !important;
+            }
+          </style>
+
+          <!-- Interactive Form Controls -->
+          <h3
+            style="
+              font-size: 1.25rem;
+              margin-bottom: var(--space-16);
+              margin-top: var(--space-48);
+            "
+          >
+            Form Fields & Interactive Controls
+          </h3>
+          <div
+            class="matrix-card"
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: var(--space-24);
+              background: var(--bg-surface-elevated);
+            "
+          >
+            <!-- Text Fields -->
+            <div>
+              <label class="form-label">Property Name</label>
+              <input
+                type="text"
+                class="form-input"
+                placeholder="e.g. Marina Executive Penthouse"
+              />
+              <span class="form-help">Provide unique marketing names</span>
+            </div>
+
+            <!-- Dropdowns / Select -->
+            <div>
+              <label class="form-label">Asset Category</label>
+              <select class="form-select">
+                <option value="">Select property type...</option>
+                <option value="residential">Residential Apartment</option>
+                <option value="commercial">Commercial Space</option>
+                <option value="villa">Luxury Villa</option>
+              </select>
+            </div>
+
+            <!-- Interactive Controls (Checkbox, Radio, Switch) -->
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: var(--space-12);
+                justify-content: center;
+              "
+            >
+              <!-- Checkbox -->
+              <label class="ctrl-label">
+                <input type="checkbox" class="ctrl-checkbox" checked />
+                <span>Enable client-side auto-routing</span>
+              </label>
+              <!-- Switch Toggle -->
+              <label class="ctrl-label">
+                <div class="ctrl-switch-wrapper">
+                  <input type="checkbox" class="ctrl-switch" checked />
+                  <span class="ctrl-switch-slider"></span>
+                </div>
+                <span>Active in Public Portals</span>
+              </label>
+            </div>
+          </div>
+
+          <style>
+            .form-label {
+              display: block;
+              font-size: 0.8125rem;
+              font-weight: 700;
+              color: var(--text-primary);
+              margin-bottom: var(--space-8);
+            }
+            .form-help {
+              display: block;
+              font-size: 0.75rem;
+              color: var(--text-muted);
+              margin-top: 4px;
+            }
+            .form-input,
+            .form-select {
+              width: 100%;
+              padding: var(--space-8) var(--space-12);
+              font-family: var(--font-en);
+              font-size: 0.875rem;
+              color: var(--text-primary);
+              background: var(--bg-app);
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-main);
+              transition: var(--transition-fast);
+            }
+            .form-input:focus,
+            .form-select:focus {
+              outline: none;
+              border-color: var(--blue-500);
+              box-shadow: 0 0 0 3px var(--blue-50);
+            }
+            .ctrl-label {
+              display: flex;
+              align-items: center;
+              gap: var(--space-12);
+              font-size: 0.875rem;
+              color: var(--text-secondary);
+              cursor: pointer;
+              user-select: none;
+            }
+            .ctrl-checkbox {
+              width: 16px;
+              height: 16px;
+              border-radius: var(--radius-4);
+              border: 1px solid var(--border-color);
+              accent-color: var(--blue-500);
+            }
+            /* Switch Styling */
+            .ctrl-switch-wrapper {
+              position: relative;
+              display: inline-block;
+              width: 40px;
+              height: 20px;
+            }
+            .ctrl-switch {
+              opacity: 0;
+              width: 0;
+              height: 0;
+            }
+            .ctrl-switch-slider {
+              position: absolute;
+              cursor: pointer;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background-color: var(--border-color);
+              transition: var(--transition-fast);
+              border-radius: var(--radius-full);
+            }
+            .ctrl-switch-slider:before {
+              position: absolute;
+              content: "";
+              height: 14px;
+              width: 14px;
+              left: 3px;
+              bottom: 3px;
+              background-color: white;
+              transition: var(--transition-fast);
+              border-radius: 50%;
+            }
+            .ctrl-switch:checked + .ctrl-switch-slider {
+              background-color: var(--blue-500);
+            }
+            .ctrl-switch:checked + .ctrl-switch-slider:before {
+              transform: translateX(20px);
+            }
+          </style>
+
+          <!-- Feedback Systems (Badges, Alerts, Toast) -->
+          <h3
+            style="
+              font-size: 1.25rem;
+              margin-bottom: var(--space-16);
+              margin-top: var(--space-48);
+            "
+          >
+            Feedback & Communication Elements
+          </h3>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 2fr 1fr;
+              gap: var(--space-24);
+            "
+          >
+            <!-- Alert Pattern -->
+            <div
+              class="matrix-card"
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: var(--space-16);
+              "
+            >
+              <div class="alert-info">
+                <i
+                  data-lucide="info"
+                  style="width: 18px; height: 18px; flex-shrink: 0"
+                ></i>
+                <div>
+                  <strong
+                    style="
+                      display: block;
+                      font-size: 0.875rem;
+                      margin-bottom: 2px;
+                    "
+                    >Data syncing operations running</strong
+                  >
+                  <p style="font-size: 0.8125rem; margin: 0; color: inherit">
+                    All dynamic leads generated over the weekend will resolve
+                    into target pipelines inside 10 minutes.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Badges Grid -->
+              <div style="display: flex; gap: var(--space-12); flex-wrap: wrap">
+                <span class="badge-success">Active Lead</span>
+                <span class="badge-warning">Awaiting Appraisal</span>
+                <span class="badge-danger">Contract Dropped</span>
+                <span class="badge-info">Review Scheduled</span>
+              </div>
+            </div>
+
+            <!-- Toast Pattern -->
+            <div
+              class="matrix-card"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--bg-surface-elevated);
+              "
+            >
+              <div class="toast-item">
+                <i
+                  data-lucide="check-circle"
+                  style="color: var(--success); width: 18px; height: 18px"
+                ></i>
+                <div style="flex: 1">
+                  <strong style="font-size: 0.875rem; display: block"
+                    >Listing Published</strong
+                  >
+                  <span style="font-size: 0.75rem; color: var(--text-secondary)"
+                    >Added to primary CRM systems</span
+                  >
+                </div>
+                <button
+                  style="
+                    border: none;
+                    background: none;
+                    color: var(--text-muted);
+                    cursor: pointer;
+                  "
+                >
+                  <i data-lucide="x" style="width: 14px; height: 14px"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <style>
+            /* Alerts & Badges Styles */
+            .alert-info {
+              background: var(--blue-50);
+              color: var(--blue-900);
+              padding: var(--space-16);
+              border-radius: var(--radius-12);
+              display: flex;
+              gap: var(--space-12);
+              align-items: flex-start;
+              border: 1px solid var(--blue-100);
+            }
+            [data-theme="dark"] .alert-info {
+              background: rgba(47, 128, 237, 0.1);
+              color: var(--blue-300);
+            }
+            .badge-success,
+            .badge-warning,
+            .badge-danger,
+            .badge-info {
+              font-size: 0.75rem;
+              font-weight: 700;
+              padding: var(--space-4) var(--space-12);
+              border-radius: var(--radius-full);
+              display: inline-block;
+            }
+            .badge-success {
+              background: #e6fbf2;
+              color: #0d7a50;
+            }
+            .badge-warning {
+              background: #fef3c7;
+              color: #92400e;
+            }
+            .badge-danger {
+              background: #fee2e2;
+              color: #991b1b;
+            }
+            .badge-info {
+              background: #ecfeff;
+              color: #155e75;
+            }
+
+            .toast-item {
+              display: flex;
+              gap: var(--space-12);
+              padding: var(--space-12) var(--space-16);
+              background: var(--bg-app);
+              border-radius: var(--radius-12);
+              box-shadow: var(--shadow-lg);
+              border: 1px solid var(--border-color);
+              width: 100%;
+              max-width: 280px;
+            }
+          </style>
+        </section>
+
+        <!-- ==========================================================================
+               19 DASHBOARD STYLE
+               ========================================================================== -->
+        <section id="sec-19" class="section-block searchable-section">
+          <h2>19 Dashboard Style</h2>
+          <p class="section-subtitle">
+            A high-fidelity implementation of the Wakeel365 CRM, emphasizing
+            breathing space, high readable utility, and clean cards.
+          </p>
+
+          <div
+            style="
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-12);
+              background: var(--bg-surface);
+              overflow: hidden;
+              box-shadow: var(--shadow-lg);
+            "
+          >
+            <!-- Simulated Header -->
+            <div
+              style="
+                background: var(--bg-app);
+                border-bottom: 1px solid var(--border-color);
+                padding: var(--space-16) var(--space-24);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 12px">
+                <span style="font-weight: 700; font-size: 0.875rem"
+                  >Wakeel CRM Dashboard</span
+                >
+                <span class="badge-success">Live Workspace</span>
+              </div>
+              <button
+                class="btn-primary"
+                style="
+                  padding: var(--space-4) var(--space-12);
+                  font-size: 0.75rem;
+                "
+              >
+                <i data-lucide="plus" style="width: 14px; height: 14px"></i> Add
+                Listing
+              </button>
+            </div>
+
+            <!-- Inner Frame Layout -->
+            <div
+              style="
+                display: grid;
+                grid-template-columns: 200px 1fr;
+                min-height: 400px;
+              "
+            >
+              <!-- Sidebar Mock -->
+              <div
+                style="
+                  background: var(--bg-surface);
+                  border-right: 1px solid var(--border-color);
+                  padding: var(--space-16);
+                  display: flex;
+                  flex-direction: column;
+                  gap: var(--space-8);
+                "
+              >
+                <div
+                  style="
+                    font-size: 0.6875rem;
+                    font-weight: 800;
+                    color: var(--text-muted);
+                    text-transform: uppercase;
+                    margin-bottom: var(--space-8);
+                  "
+                >
+                  Real Estate CRM
+                </div>
+                <div
+                  style="
+                    padding: 8px 12px;
+                    background: var(--blue-50);
+                    color: var(--blue-600);
+                    border-radius: var(--radius-8);
+                    font-size: 0.8125rem;
+                    font-weight: 600;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                  "
+                >
+                  <i
+                    data-lucide="layout-dashboard"
+                    style="width: 14px; height: 14px"
+                  ></i>
+                  Pipelines
+                </div>
+                <div
+                  style="
+                    padding: 8px 12px;
+                    color: var(--text-secondary);
+                    border-radius: var(--radius-8);
+                    font-size: 0.8125rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                  "
+                >
+                  <i
+                    data-lucide="building-2"
+                    style="width: 14px; height: 14px"
+                  ></i>
+                  Properties
+                </div>
+                <div
+                  style="
+                    padding: 8px 12px;
+                    color: var(--text-secondary);
+                    border-radius: var(--radius-8);
+                    font-size: 0.8125rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                  "
+                >
+                  <i
+                    data-lucide="contact-2"
+                    style="width: 14px; height: 14px"
+                  ></i>
+                  Lead Matrix
+                </div>
+              </div>
+
+              <!-- Workspace Mock Content -->
+              <div
+                style="
+                  padding: var(--space-24);
+                  background: var(--bg-app);
+                  display: flex;
+                  flex-direction: column;
+                  gap: var(--space-24);
+                "
+              >
+                <!-- Metric Cards Block -->
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: var(--space-16);
+                  "
+                >
+                  <div
+                    style="
+                      background: var(--bg-surface);
+                      border: 1px solid var(--border-color);
+                      border-radius: var(--radius-8);
+                      padding: var(--space-16);
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 0.75rem;
+                        color: var(--text-muted);
+                        display: block;
+                        font-weight: 700;
+                      "
+                      >VALUATION ACTIVE</span
+                    >
+                    <strong
+                      style="
+                        font-size: 1.5rem;
+                        display: block;
+                        margin-top: 4px;
+                        letter-spacing: -0.02em;
+                      "
+                      >$14.2M</strong
+                    >
+                  </div>
+                  <div
+                    style="
+                      background: var(--bg-surface);
+                      border: 1px solid var(--border-color);
+                      border-radius: var(--radius-8);
+                      padding: var(--space-16);
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 0.75rem;
+                        color: var(--text-muted);
+                        display: block;
+                        font-weight: 700;
+                      "
+                      >DEAL CONVERSIONS</span
+                    >
+                    <strong
+                      style="
+                        font-size: 1.5rem;
+                        display: block;
+                        margin-top: 4px;
+                        letter-spacing: -0.02em;
+                      "
+                      >24.8%</strong
+                    >
+                  </div>
+                  <div
+                    style="
+                      background: var(--bg-surface);
+                      border: 1px solid var(--border-color);
+                      border-radius: var(--radius-8);
+                      padding: var(--space-16);
+                    "
+                  >
+                    <span
+                      style="
+                        font-size: 0.75rem;
+                        color: var(--text-muted);
+                        display: block;
+                        font-weight: 700;
+                      "
+                      >TOTAL ACQUISITIONS</span
+                    >
+                    <strong
+                      style="
+                        font-size: 1.5rem;
+                        display: block;
+                        margin-top: 4px;
+                        letter-spacing: -0.02em;
+                      "
+                      >1,840</strong
+                    >
+                  </div>
+                </div>
+
+                <!-- List Tables -->
+                <div
+                  style="
+                    border: 1px solid var(--border-color);
+                    border-radius: var(--radius-8);
+                    overflow: hidden;
+                  "
+                >
+                  <table
+                    style="
+                      width: 100%;
+                      border-collapse: collapse;
+                      text-align: left;
+                      font-size: 0.8125rem;
+                    "
+                  >
+                    <thead>
+                      <tr
+                        style="
+                          background: var(--bg-surface);
+                          border-bottom: 1px solid var(--border-color);
+                        "
+                      >
+                        <th
+                          style="
+                            padding: 12px var(--space-16);
+                            font-weight: 700;
+                            color: var(--text-secondary);
+                          "
+                        >
+                          Property Asset
+                        </th>
+                        <th
+                          style="
+                            padding: 12px var(--space-16);
+                            font-weight: 700;
+                            color: var(--text-secondary);
+                          "
+                        >
+                          Owner / Lead
+                        </th>
+                        <th
+                          style="
+                            padding: 12px var(--space-16);
+                            font-weight: 700;
+                            color: var(--text-secondary);
+                          "
+                        >
+                          Pricing Plan
+                        </th>
+                        <th
+                          style="
+                            padding: 12px var(--space-16);
+                            font-weight: 700;
+                            color: var(--text-secondary);
+                          "
+                        >
+                          State
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        style="
+                          border-bottom: 1px solid var(--border-color-muted);
+                        "
+                      >
+                        <td
+                          style="
+                            padding: 12px var(--space-16);
+                            font-weight: 600;
+                          "
+                        >
+                          Alexandria Harbour Towers
+                        </td>
+                        <td
+                          style="
+                            padding: 12px var(--space-16);
+                            color: var(--text-secondary);
+                          "
+                        >
+                          Ramez Khaled
+                        </td>
+                        <td
+                          style="
+                            padding: 12px var(--space-16);
+                            font-weight: 500;
+                          "
+                        >
+                          $2,450,000
+                        </td>
+                        <td style="padding: 12px var(--space-16)">
+                          <span
+                            class="badge-success"
+                            style="font-size: 0.6875rem"
+                            >Active</span
+                          >
+                        </td>
+                      </tr>
+                      <tr>
+                        <td
+                          style="
+                            padding: 12px var(--space-16);
+                            font-weight: 600;
+                          "
+                        >
+                          East Gate Commercial Hub
+                        </td>
+                        <td
+                          style="
+                            padding: 12px var(--space-16);
+                            color: var(--text-secondary);
+                          "
+                        >
+                          Abdullah Fathallah
+                        </td>
+                        <td
+                          style="
+                            padding: 12px var(--space-16);
+                            font-weight: 500;
+                          "
+                        >
+                          $6,120,000
+                        </td>
+                        <td style="padding: 12px var(--space-16)">
+                          <span
+                            class="badge-warning"
+                            style="font-size: 0.6875rem"
+                            >Awaiting</span
+                          >
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               20 MOBILE APP STYLE
+               ========================================================================== -->
+        <section id="sec-20" class="section-block searchable-section">
+          <h2>20 Mobile App Style</h2>
+          <p class="section-subtitle">
+            Consistent design language scaled perfectly for the palm of your
+            hand.
+          </p>
+
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding: var(--space-32) 0;
+            "
+          >
+            <!-- Smartphone Shell -->
+            <div
+              style="
+                width: 320px;
+                height: 600px;
+                border: 8px solid var(--text-primary);
+                border-radius: 40px;
+                background: var(--bg-app);
+                box-shadow: var(--shadow-xl);
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                position: relative;
+              "
+            >
+              <!-- Speaker / Notch -->
+              <div
+                style="
+                  width: 120px;
+                  height: 18px;
+                  background: var(--text-primary);
+                  position: absolute;
+                  top: 0;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  border-bottom-left-radius: 12px;
+                  border-bottom-right-radius: 12px;
+                  z-index: 99;
+                "
+              ></div>
+
+              <!-- Top Mobile Bar -->
+              <div
+                style="
+                  padding: 24px 20px 10px 20px;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  font-size: 0.75rem;
+                  font-weight: 700;
+                  color: var(--text-secondary);
+                  background: var(--bg-surface);
+                "
+              >
+                <span>9:41 AM</span>
+                <div style="display: flex; gap: 4px; align-items: center">
+                  <i data-lucide="wifi" style="width: 12px; height: 12px"></i>
+                  <i
+                    data-lucide="battery"
+                    style="width: 14px; height: 14px"
+                  ></i>
+                </div>
+              </div>
+
+              <!-- Mobile Header -->
+              <div
+                style="
+                  padding: 12px 20px;
+                  background: var(--bg-surface);
+                  border-bottom: 1px solid var(--border-color);
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
+                <strong style="font-size: 1rem">Property View</strong>
+                <i
+                  data-lucide="bell"
+                  style="
+                    width: 18px;
+                    height: 18px;
+                    color: var(--text-secondary);
+                  "
+                ></i>
+              </div>
+
+              <!-- Scrollable Mobile Space -->
+              <div
+                style="
+                  flex: 1;
+                  overflow-y: auto;
+                  padding: 20px;
+                  display: flex;
+                  flex-direction: column;
+                  gap: var(--space-16);
+                "
+              >
+                <!-- Listing Photo -->
+                <div
+                  style="
+                    height: 140px;
+                    background: linear-gradient(
+                      135deg,
+                      var(--blue-400) 0%,
+                      var(--blue-600) 100%
+                    );
+                    border-radius: var(--radius-12);
+                    position: relative;
+                    padding: var(--space-12);
+                    display: flex;
+                    align-items: flex-end;
+                    color: white;
+                  "
+                >
+                  <div
+                    style="
+                      position: absolute;
+                      top: var(--space-12);
+                      right: var(--space-12);
+                      background: rgba(0, 0, 0, 0.4);
+                      padding: 4px 8px;
+                      border-radius: var(--radius-4);
+                      font-size: 0.6875rem;
+                    "
+                  >
+                    $1,400,000
+                  </div>
+                  <div>
+                    <strong style="font-size: 0.875rem; display: block"
+                      >Royal Skyline Suites</strong
+                    >
+                    <span style="font-size: 0.6875rem; opacity: 0.8"
+                      >Alexandria, Egypt</span
+                    >
+                  </div>
+                </div>
+
+                <!-- Property Fields -->
+                <div
+                  style="
+                    background: var(--bg-surface);
+                    border: 1px solid var(--border-color);
+                    border-radius: var(--radius-12);
+                    padding: var(--space-12);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                  "
+                >
+                  <span
+                    style="
+                      font-size: 0.6875rem;
+                      font-weight: 700;
+                      color: var(--text-muted);
+                    "
+                    >ACTIVE BROKER DELIVERABLE</span
+                  >
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                    "
+                  >
+                    <span style="font-size: 0.8125rem; font-weight: 600"
+                      >Assigned Representative</span
+                    >
+                    <span
+                      style="
+                        font-size: 0.8125rem;
+                        color: var(--blue-600);
+                        font-weight: 700;
+                      "
+                      >Ramez Khaled</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Floating Action Button -->
+              <button
+                style="
+                  position: absolute;
+                  bottom: 80px;
+                  right: 20px;
+                  width: 48px;
+                  height: 48px;
+                  border-radius: 50%;
+                  background: var(--blue-500);
+                  border: none;
+                  color: white;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  box-shadow: var(--shadow-lg);
+                  cursor: pointer;
+                "
+              >
+                <i data-lucide="plus"></i>
+              </button>
+
+              <!-- Bottom Navigation Bar -->
+              <div
+                style="
+                  height: 64px;
+                  background: var(--bg-surface);
+                  border-top: 1px solid var(--border-color);
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-around;
+                  padding-bottom: 8px;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 2px;
+                    color: var(--blue-500);
+                    cursor: pointer;
+                  "
+                >
+                  <i data-lucide="home" style="width: 18px; height: 18px"></i>
+                  <span style="font-size: 0.625rem; font-weight: 700"
+                    >Home</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 2px;
+                    color: var(--text-secondary);
+                    cursor: pointer;
+                  "
+                >
+                  <i
+                    data-lucide="building"
+                    style="width: 18px; height: 18px"
+                  ></i>
+                  <span style="font-size: 0.625rem">Properties</span>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 2px;
+                    color: var(--text-secondary);
+                    cursor: pointer;
+                  "
+                >
+                  <i
+                    data-lucide="user-round"
+                    style="width: 18px; height: 18px"
+                  ></i>
+                  <span style="font-size: 0.625rem">Profile</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               21 MOTION DESIGN
+               ========================================================================== -->
+        <section id="sec-21" class="section-block searchable-section">
+          <h2>21 Motion Design</h2>
+          <p class="section-subtitle">
+            A simple animation system designed to feel smooth, intentional, and
+            performant.
+          </p>
+
+          <div
+            class="matrix-card"
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: var(--space-24);
+            "
+          >
+            <!-- Timings Info -->
+            <div>
+              <h4 style="margin-bottom: var(--space-12)">
+                Animation Timing Guidelines
+              </h4>
+              <p style="font-size: 0.875rem">
+                We use linear curves for loading animations and ease-out curves
+                for micro-interactions like button clicks, hover transitions,
+                and cards.
+              </p>
+              <table
+                style="
+                  width: 100%;
+                  border-collapse: collapse;
+                  font-size: 0.8125rem;
+                  margin-top: var(--space-16);
+                "
+              >
+                <tr style="border-bottom: 1px solid var(--border-color-muted)">
+                  <td style="padding: 8px 0; font-weight: 600">
+                    Logo Line Draw
+                  </td>
+                  <td
+                    style="
+                      text-align: right;
+                      color: var(--blue-500);
+                      font-weight: 700;
+                    "
+                  >
+                    1.2s to 1.5s
+                  </td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color-muted)">
+                  <td style="padding: 8px 0; font-weight: 600">Hover States</td>
+                  <td
+                    style="
+                      text-align: right;
+                      color: var(--blue-500);
+                      font-weight: 700;
+                    "
+                  >
+                    0.15s (Fast)
+                  </td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color-muted)">
+                  <td style="padding: 8px 0; font-weight: 600">
+                    Modals / Drawers
+                  </td>
+                  <td
+                    style="
+                      text-align: right;
+                      color: var(--blue-500);
+                      font-weight: 700;
+                    "
+                  >
+                    0.25s (Normal)
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Live Interaction Matrix -->
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                gap: var(--space-16);
+              "
+            >
+              <div
+                style="
+                  text-align: center;
+                  background: var(--bg-surface);
+                  padding: var(--space-24);
+                  border-radius: var(--radius-12);
+                  border: 1px solid var(--border-color);
+                "
+              >
+                <!-- Animating Logo Target -->
+                <div id="motionTargetLogo" class="motion-logo-box">W</div>
+                <button
+                  class="btn-primary"
+                  id="btnTriggerMotion"
+                  style="margin-top: var(--space-16); font-size: 0.75rem"
+                >
+                  Test Interlock Animation
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <style>
+            .motion-logo-box {
+              width: 64px;
+              height: 64px;
+              background: var(--blue-500);
+              border-radius: var(--radius-12);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-weight: 900;
+              font-size: 1.5rem;
+              margin: 0 auto;
+              transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            .motion-logo-box.animated {
+              transform: scale(1.1) rotate(360deg);
+            }
+          </style>
+        </section>
+
+        <!-- ==========================================================================
+               22 SOCIAL MEDIA STYLE
+               ========================================================================== -->
+        <section id="sec-22" class="section-block searchable-section">
+          <h2>22 Social Media Guidelines</h2>
+          <p class="section-subtitle">
+            Rules for maintaining design consistency across LinkedIn, Instagram,
+            Facebook, and Threads.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: var(--space-24);
+            "
+          >
+            <div class="matrix-card">
+              <h4
+                style="
+                  margin-bottom: var(--space-8);
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                "
+              >
+                <i data-lucide="instagram" style="color: var(--blue-500)"></i>
+                Square Feed Posts
+              </h4>
+              <p style="font-size: 0.875rem">
+                Keep a strict <strong>80px internal margin</strong>. Place the
+                interlocking W logo in the top-right corner, and use Tajawal for
+                headlines with high contrast background tones.
+              </p>
+            </div>
+            <div class="matrix-card">
+              <h4
+                style="
+                  margin-bottom: var(--space-8);
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                "
+              >
+                <i data-lucide="linkedin" style="color: var(--blue-500)"></i>
+                Professional Carousel
+              </h4>
+              <p style="font-size: 0.875rem">
+                Limit text to 3 lines per slide. Use solid `#0F172A` background
+                layers accented with single-line technical vectors.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               23 PHOTOGRAPHY STYLE
+               ========================================================================== -->
+        <section id="sec-23" class="section-block searchable-section">
+          <h2>23 Photography Style</h2>
+          <p class="section-subtitle">
+            Visual guidelines for selecting and treating imagery inside product
+            interfaces and marketing materials.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+              gap: var(--space-24);
+            "
+          >
+            <div
+              style="
+                border: 1px solid var(--border-color);
+                border-radius: var(--radius-12);
+                overflow: hidden;
+              "
+            >
+              <div
+                style="
+                  height: 120px;
+                  background:
+                    linear-gradient(
+                      180deg,
+                      transparent 0%,
+                      rgba(15, 23, 42, 0.8) 100%
+                    ),
+                    url(&quot;https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80&quot;)
+                      center/cover;
+                  padding: var(--space-12);
+                  display: flex;
+                  align-items: flex-end;
+                  color: white;
+                "
+              >
+                <strong style="font-size: 0.875rem">Natural Workspace</strong>
+              </div>
+              <div
+                style="
+                  padding: var(--space-12);
+                  font-size: 0.8125rem;
+                  color: var(--text-secondary);
+                "
+              >
+                Focus on bright, collaborative spaces with blue accents and
+                natural daylight. Avoid staged stock photography.
+              </div>
+            </div>
+            <div
+              style="
+                border: 1px solid var(--border-color);
+                border-radius: var(--radius-12);
+                overflow: hidden;
+              "
+            >
+              <div
+                style="
+                  height: 120px;
+                  background:
+                    linear-gradient(
+                      180deg,
+                      transparent 0%,
+                      rgba(15, 23, 42, 0.8) 100%
+                    ),
+                    url(&quot;https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80&quot;)
+                      center/cover;
+                  padding: var(--space-12);
+                  display: flex;
+                  align-items: flex-end;
+                  color: white;
+                "
+              >
+                <strong style="font-size: 0.875rem">Modern Structures</strong>
+              </div>
+              <div
+                style="
+                  padding: var(--space-12);
+                  font-size: 0.8125rem;
+                  color: var(--text-secondary);
+                "
+              >
+                Use geometric shots of architecture and real estate that
+                showcase clean lines and structured design.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               24 ILLUSTRATION STYLE
+               ========================================================================== -->
+        <section id="sec-24" class="section-block searchable-section">
+          <h2>24 Illustration Style</h2>
+          <p class="section-subtitle">
+            How we represent abstract actions and systems with graphics.
+          </p>
+
+          <div
+            style="
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-12);
+              padding: var(--space-32);
+              background: var(--bg-surface);
+              display: flex;
+              align-items: center;
+              gap: var(--space-32);
+            "
+          >
+            <div
+              style="
+                width: 140px;
+                height: 140px;
+                background: var(--bg-app);
+                border: 2px dashed var(--blue-300);
+                border-radius: var(--radius-12);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <i
+                data-lucide="palette"
+                style="
+                  width: 48px;
+                  height: 48px;
+                  color: var(--blue-500);
+                  stroke-width: 1.5px;
+                "
+              ></i>
+            </div>
+            <div>
+              <h4 style="margin-bottom: var(--space-8)">
+                Flat, Structured, & Geometric
+              </h4>
+              <p
+                style="font-size: 0.875rem; margin-bottom: 0; line-height: 1.6"
+              >
+                Our illustration system relies on
+                <strong>isometric perspective</strong> and
+                <strong>rounded shapes</strong>. Avoid using gradients or
+                hand-drawn sketches. Keep designs aligned with the 8px grid
+                system.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               25 BRAND ARCHITECTURE
+               ========================================================================== -->
+        <section id="sec-25" class="section-block searchable-section">
+          <h2>25 Brand Architecture</h2>
+          <p class="section-subtitle">
+            A unified system for scaling sub-brands and services under the
+            Wakeel365 parent identity.
+          </p>
+
+          <p>
+            We use a cohesive visual strategy for sub-brands. Every entity keeps
+            the core interlocking W logo, but uses a unique secondary accent
+            color to differentiate its service area.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+              gap: var(--space-16);
+              margin-top: var(--space-24);
+            "
+          >
+            <div
+              style="
+                border-left: 4px solid var(--blue-500);
+                padding: var(--space-12) var(--space-16);
+                background: var(--bg-surface);
+              "
+            >
+              <strong style="display: block; font-size: 0.875rem"
+                >Wakeel Developments</strong
+              >
+              <span style="font-size: 0.75rem; color: var(--text-muted)"
+                >Accent: Steel Blue (#2F80ED)</span
+              >
+            </div>
+            <div
+              style="
+                border-left: 4px solid #10b981;
+                padding: var(--space-12) var(--space-16);
+                background: var(--bg-surface);
+              "
+            >
+              <strong style="display: block; font-size: 0.875rem"
+                >Wakeel CRM</strong
+              >
+              <span style="font-size: 0.75rem; color: var(--text-muted)"
+                >Accent: Emerald Green</span
+              >
+            </div>
+            <div
+              style="
+                border-left: 4px solid #f59e0b;
+                padding: var(--space-12) var(--space-16);
+                background: var(--bg-surface);
+              "
+            >
+              <strong style="display: block; font-size: 0.875rem"
+                >Wakeel Sales</strong
+              >
+              <span style="font-size: 0.75rem; color: var(--text-muted)"
+                >Accent: Warm Amber</span
+              >
+            </div>
+            <div
+              style="
+                border-left: 4px solid #8b5cf6;
+                padding: var(--space-12) var(--space-16);
+                background: var(--bg-surface);
+              "
+            >
+              <strong style="display: block; font-size: 0.875rem"
+                >Wakeel AI</strong
+              >
+              <span style="font-size: 0.75rem; color: var(--text-muted)"
+                >Accent: Royal Purple</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               26 DOWNLOADS
+               ========================================================================== -->
+        <section id="sec-26" class="section-block searchable-section">
+          <h2>26 Asset Downloads</h2>
+          <p class="section-subtitle">
+            Access raw, verified assets to build consistent marketing and
+            product materials.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+              gap: var(--space-16);
+            "
+          >
+            <div
+              class="matrix-card"
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: var(--space-16) var(--space-24);
+              "
+            >
+              <div>
+                <strong style="display: block; font-size: 0.875rem"
+                  >Logo Package (.SVG)</strong
+                >
+                <span style="font-size: 0.75rem; color: var(--text-muted)"
+                  >Vector curves (Light/Dark)</span
+                >
+              </div>
+              <button
+                class="btn-outline"
+                style="padding: 6px 12px; font-size: 0.75rem"
+              >
+                <i data-lucide="download" style="width: 14px; height: 14px"></i>
+                Get ZIP
+              </button>
+            </div>
+            <div
+              class="matrix-card"
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: var(--space-16) var(--space-24);
+              "
+            >
+              <div>
+                <strong style="display: block; font-size: 0.875rem"
+                  >Figma Template (.FIG)</strong
+                >
+                <span style="font-size: 0.75rem; color: var(--text-muted)"
+                  >UI Style library</span
+                >
+              </div>
+              <button
+                class="btn-outline"
+                style="padding: 6px 12px; font-size: 0.75rem"
+              >
+                <i data-lucide="download" style="width: 14px; height: 14px"></i>
+                Open file
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               27 DO & DON'T
+               ========================================================================== -->
+        <section id="sec-27" class="section-block searchable-section">
+          <h2>27 Do & Don't Matrix</h2>
+          <p class="section-subtitle">
+            A reference guide for correct logo placement and design choices.
+          </p>
+
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: var(--space-24);
+            "
+          >
+            <div
+              style="
+                border: 1px solid rgba(16, 185, 129, 0.2);
+                padding: var(--space-24);
+                border-radius: var(--radius-12);
+                background: rgba(16, 185, 129, 0.02);
+              "
+            >
+              <strong
+                style="
+                  color: var(--success);
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  margin-bottom: var(--space-12);
+                  font-size: 1rem;
+                "
+                ><i data-lucide="check-circle"></i> Correct Application</strong
+              >
+              <ul
+                style="
+                  font-size: 0.875rem;
+                  color: var(--text-secondary);
+                  margin-left: var(--space-16);
+                  line-height: 1.8;
+                "
+              >
+                <li>Use our primary blue (#2F80ED) on white backgrounds.</li>
+                <li>Maintain a minimum safe margin of 24px around the logo.</li>
+                <li>
+                  Ensure copy uses our standard voice:
+                  <em>"Let Wakeel handle the rest."</em>
+                </li>
+              </ul>
+            </div>
+
+            <div
+              style="
+                border: 1px solid rgba(239, 68, 68, 0.2);
+                padding: var(--space-24);
+                border-radius: var(--radius-12);
+                background: rgba(239, 68, 68, 0.02);
+              "
+            >
+              <strong
+                style="
+                  color: var(--danger);
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  margin-bottom: var(--space-12);
+                  font-size: 1rem;
+                "
+                ><i data-lucide="x-circle"></i> Avoid Misuse</strong
+              >
+              <ul
+                style="
+                  font-size: 0.875rem;
+                  color: var(--text-secondary);
+                  margin-left: var(--space-16);
+                  line-height: 1.8;
+                "
+              >
+                <li>
+                  Never use heavy gradients, shadow blurs, or 3D rotations on
+                  the logo.
+                </li>
+                <li>Do not mix multiple fonts inside a single paragraph.</li>
+                <li>Avoid complex, salesy marketing taglines.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               28 ASSETS MATRIX
+               ========================================================================== -->
+        <section id="sec-28" class="section-block searchable-section">
+          <h2>28 Assets Matrix</h2>
+          <p class="section-subtitle">
+            Guidelines for asset usage depending on placement size and format.
+          </p>
+
+          <div
+            style="
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-12);
+              overflow: hidden;
+            "
+          >
+            <table
+              style="
+                width: 100%;
+                border-collapse: collapse;
+                text-align: left;
+                font-size: 0.8125rem;
+              "
+            >
+              <thead>
+                <tr
+                  style="
+                    background: var(--bg-surface);
+                    border-bottom: 1px solid var(--border-color);
+                  "
+                >
+                  <th
+                    style="
+                      padding: 12px var(--space-16);
+                      font-weight: 700;
+                      color: var(--text-secondary);
+                    "
+                  >
+                    Format
+                  </th>
+                  <th
+                    style="
+                      padding: 12px var(--space-16);
+                      font-weight: 700;
+                      color: var(--text-secondary);
+                    "
+                  >
+                    Target Application
+                  </th>
+                  <th
+                    style="
+                      padding: 12px var(--space-16);
+                      font-weight: 700;
+                      color: var(--text-secondary);
+                    "
+                  >
+                    Preferred Scaling
+                  </th>
+                  <th
+                    style="
+                      padding: 12px var(--space-16);
+                      font-weight: 700;
+                      color: var(--text-secondary);
+                    "
+                  >
+                    Requirements
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color-muted)">
+                  <td
+                    style="
+                      padding: 12px var(--space-16);
+                      font-family: monospace;
+                      font-weight: 700;
+                    "
+                  >
+                    vector-logo.svg
+                  </td>
+                  <td style="padding: 12px var(--space-16)">
+                    Web & Core Platforms
+                  </td>
+                  <td style="padding: 12px var(--space-16)">Scalable Vector</td>
+                  <td
+                    style="
+                      padding: 12px var(--space-16);
+                      color: var(--text-muted);
+                    "
+                  >
+                    Primary standard
+                  </td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color-muted)">
+                  <td
+                    style="
+                      padding: 12px var(--space-16);
+                      font-family: monospace;
+                      font-weight: 700;
+                    "
+                  >
+                    avatar-avatar.png
+                  </td>
+                  <td style="padding: 12px var(--space-16)">
+                    Social Profiles & Chatbots
+                  </td>
+                  <td style="padding: 12px var(--space-16)">512px x 512px</td>
+                  <td
+                    style="
+                      padding: 12px var(--space-16);
+                      color: var(--text-muted);
+                    "
+                  >
+                    8px border radius
+                  </td>
+                </tr>
+                <tr>
+                  <td
+                    style="
+                      padding: 12px var(--space-16);
+                      font-family: monospace;
+                      font-weight: 700;
+                    "
+                  >
+                    print-vector.eps
+                  </td>
+                  <td style="padding: 12px var(--space-16)">
+                    Exhibitions & Print Materials
+                  </td>
+                  <td style="padding: 12px var(--space-16)">Scalable CMYK</td>
+                  <td
+                    style="
+                      padding: 12px var(--space-16);
+                      color: var(--text-muted);
+                    "
+                  >
+                    Coated finishes
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==========================================================================
+               29 DEVELOPER NOTES
+               ========================================================================== -->
+        <section id="sec-29" class="section-block searchable-section">
+          <h2>29 Developer Integration Notes</h2>
+          <p class="section-subtitle">
+            How to implement the Wakeel365 design system tokens inside your
+            application stylesheet.
+          </p>
+
+          <p>
+            Copy this CSS block into your app's global stylesheet to start using
+            our central color system, spacing scale, and typography values.
+          </p>
+
+          <pre
+            style="
+              background: var(--bg-surface);
+              border: 1px solid var(--border-color);
+              padding: var(--space-24);
+              border-radius: var(--radius-12);
+              font-family: monospace;
+              font-size: 0.8125rem;
+              overflow-x: auto;
+              color: var(--text-primary);
+              line-height: 1.6;
+            "
+          >
+:root {
+  /* Wakeel365 Core Accent CSS Tokens */
+  --blue-primary: #2F80ED;
+  --blue-dark: #1F6FE5;
+  --blue-light: #5CA0F5;
+  --neutral-dark: #0F172A;
+
+  /* Spacing Scale */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  /* Corner Radius */
+  --radius-main: 8px;
+  --radius-card: 12px;
+}</pre
+          >
+        </section>
+
+        <!-- ==========================================================================
+               30 FINAL SUMMARY
+               ========================================================================== -->
+        <section id="sec-30" class="section-block searchable-section">
+          <h2>30 System Summary</h2>
+          <p class="section-subtitle">
+            A final recap of the design framework goals.
+          </p>
+          <p>
+            The <strong>Wakeel365</strong> design system is built to balance
+            enterprise reliability with simple, clean product interfaces. By
+            sticking to these visual guidelines, typography pairings, and layout
+            grids, we ensure the platform remains professional, scalable, and
+            intuitive to use.
+          </p>
+          <div class="callout-box">
+            <p style="font-weight: 700">
+              Wakeel365 Core Design System — Standardized & Production-Ready.
+            </p>
+          </div>
+        </section>
+
+        <!-- PLACEMARKER FOR THE NEXT INCREMENTAL SECTIONS -->
+        <div id="next-system-blocks"></div>
+      </div>
+    </main>
+
+    <script>
+      // System Sections Matrix Mapping
+      const systemSections = [
+        { id: "01", name: "Cover", icon: "book-open" },
+        { id: "02", name: "Table of Contents", icon: "layers" },
+        { id: "03", name: "Brand Story", icon: "history" },
+        { id: "04", name: "Mission", icon: "target" },
+        { id: "05", name: "Vision", icon: "eye" },
+        { id: "06", name: "Values", icon: "shield-check" },
+        { id: "07", name: "Personality", icon: "smile" },
+        { id: "08", name: "Tone of Voice", icon: "message-square" },
+        { id: "09", name: "Positioning", icon: "compass" },
+        { id: "10", name: "Logo Guidelines", icon: "award" },
+        { id: "11", name: "Logo Construction", icon: "grid" },
+        { id: "12", name: "Colors", icon: "palette" },
+        { id: "13", name: "Typography", icon: "type" },
+        { id: "14", name: "Spacing", icon: "move" },
+        { id: "15", name: "Radius", icon: "square" },
+        { id: "16", name: "Shadows", icon: "copy" },
+        { id: "17", name: "Iconography", icon: "feather" },
+        { id: "18", name: "Components", icon: "cpu" },
+        { id: "19", name: "Dashboard", icon: "layout" },
+        { id: "20", name: "Mobile Style", icon: "smartphone" },
+        { id: "21", name: "Motion Design", icon: "zap" },
+        { id: "22", name: "Social Media", icon: "share-2" },
+        { id: "23", name: "Photography", icon: "image" },
+        { id: "24", name: "Illustration", icon: "brush" },
+        { id: "25", name: "Brand Architecture", icon: "git-branch" },
+        { id: "26", name: "Downloads", icon: "download" },
+        { id: "27", name: "Do & Don't", icon: "check-circle" },
+        { id: "28", name: "Assets Matrix", icon: "package" },
+        { id: "29", name: "Developer Notes", icon: "code" },
+        { id: "30", name: "Final Summary", icon: "flag" },
+      ];
+
+      // Build Navigation and Table of Contents Grid
+      const sidebarNav = document.getElementById("sidebarNav");
+      const tocGrid = document.getElementById("tocGrid");
+
+      let currentCategory = "";
+
+      systemSections.forEach((sec, idx) => {
+        // Segment Nav into clean buckets
+        let catName = "Identity System";
+        if (idx >= 9 && idx < 17) catName = "Visual Tokens";
+        if (idx >= 17 && idx < 21) catName = "Interfaces & Motion";
+        if (idx >= 21) catName = "Brand Assets & Specs";
+
+        if (currentCategory !== catName) {
+          currentCategory = catName;
+          const catHeader = document.createElement("div");
+          catHeader.className = "nav-category";
+          catHeader.innerText = currentCategory;
+          sidebarNav.appendChild(catHeader);
+        }
+
+        // Build individual nav item
+        const link = document.createElement("a");
+        link.className = `nav-link ${idx === 0 ? "active" : ""}`;
+        link.href = `#sec-${sec.id}`;
+        link.innerHTML = `<i data-lucide="${sec.icon}"></i> <span>${sec.id} ${sec.name}</span>`;
+        sidebarNav.appendChild(link);
+
+        // Populate Table of Contents Grid
+        if (tocGrid && idx !== 1) {
+          const card = document.createElement("a");
+          card.style.textDecoration = "none";
+          card.href = `#sec-${sec.id}`;
+          card.innerHTML = `
+                    <div class="matrix-card" style="padding: var(--space-16); height: 100%;">
+                        <div style="font-size:0.75rem; color: var(--text-muted); font-weight:700; margin-bottom:4px;">SECTION ${sec.id}</div>
+                        <div style="font-weight:700; color:var(--text-primary); font-size:1rem;">${sec.name}</div>
+                    </div>
+                `;
+          tocGrid.appendChild(card);
+        }
+      });
+
+      // Interactive Motion Engine Live Trigger
+      const btnTriggerMotion = document.getElementById("btnTriggerMotion");
+      const motionTargetLogo = document.getElementById("motionTargetLogo");
+
+      if (btnTriggerMotion && motionTargetLogo) {
+        btnTriggerMotion.addEventListener("click", () => {
+          motionTargetLogo.classList.add("animated");
+          btnTriggerMotion.disabled = true;
+
+          setTimeout(() => {
+            motionTargetLogo.classList.remove("animated");
+            btnTriggerMotion.disabled = false;
+          }, 1500); // Resets after the 1.5s timing curve completes
+        });
+      }
+
+      // Initialize Lucide Vectors
+      lucide.createIcons();
+
+      // Theme Toggle Engine
+      const themeToggle = document.getElementById("themeToggle");
+      themeToggle.addEventListener("click", () => {
+        const currentTheme =
+          document.documentElement.getAttribute("data-theme");
+        const targetTheme = currentTheme === "light" ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", targetTheme);
+
+        // Update Toggle Button Visuals
+        const icon = themeToggle.querySelector("i");
+        if (targetTheme === "dark") {
+          icon.setAttribute("data-lucide", "sun");
+        } else {
+          icon.setAttribute("data-lucide", "moon");
+        }
+        lucide.createIcons();
+      });
+
+      // Sidebar Toggle Engine
+      const sidebarToggle = document.getElementById("sidebarToggle");
+      sidebarToggle.addEventListener("click", () => {
+        document.body.classList.toggle("sidebar-collapsed");
+      });
+
+      // Navigation Active States via IntersectionObserver Matrix
+      const observerOptions = {
+        root: null,
+        rootMargin: "-20% 0px -60% 0px",
+        threshold: 0,
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute("id");
+            document.querySelectorAll(".nav-link").forEach((link) => {
+              link.classList.remove("active");
+              if (link.getAttribute("href") === `#${id}`) {
+                link.classList.add("active");
+              }
+            });
+          }
+        });
+      }, observerOptions);
+
+      document
+        .querySelectorAll(".searchable-section")
+        .forEach((sec) => observer.observe(sec));
+    </script>
+  </body>
+</html>
